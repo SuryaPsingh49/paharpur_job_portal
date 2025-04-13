@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: online-job-portal
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn OnlineJobPortal.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: OnlineJobPortal.settings
+      - key: SECRET_KEY
+        value: django-insecure-203z4$&*ze3!3zxn_ki#p!nk3e_kahxc+id(ra!p26kr%-!k5a
+      - key: DEBUG
+        value: "False"

@@ -1,0 +1,74 @@
+{% load static %}
+
+{% block body %}
+
+{% include 'user_navigation.html' %}
+<style>
+
+.center{
+  top: 65%;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  background: #C6EBC5;
+  border-radius: 10px;
+  box-shadow: 10px 10px 15px rgba(0,0,0,0.05);
+}
+
+.center form{
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+
+</style>
+<marquee direction="right" style="font-family:'Monotype Corsiva';font-size:25px;color:white;background-color:#240A34;font-weight:bold;margin-top:0.5%">
+    Apply for Job
+</marquee>
+
+
+<div class="container" style="height:350px;">
+<div class="center" style="height:200px;">
+    <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+        <div class="form-row">
+            <label class="font-weight-bold" style="margin-top:20px;">Upload Resume</label>
+            <input type="file" class="form-control" name="resume" accept="application/pdf">
+
+
+        </div>
+        <input type="submit" value="Submit" class="btn btn-danger mt-3">
+    </form>
+
+</div>
+
+</div>
+
+
+{% include 'footer.html' %}
+
+{% if error == "close" %}
+<script>
+    alert("Application submissions are Closed, Last date is Over.......");
+    window.location = ('{% url 'user_latestjobs' %}')
+</script>
+{% endif %}
+
+{% if error == "notopen" %}
+<script>
+    alert("Application submissions are not Opened yet.......");
+    window.location = ('{% url 'user_latestjobs' %}')
+</script>
+{% endif %}
+
+{% if error == "done" %}
+<script>
+    alert("Job Application Sumitted Successfully");
+    window.location = ('{% url 'user_latestjobs' %}')
+</script>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Dashboard - Online Job Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-color: #D24545;
+            --secondary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Recruiter Top Navigation */
+        .recruiter-navbar {
+            background: linear-gradient(135deg, var(--primary-color), #e35d5d);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .recruiter-nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .portal-name {
+            color: var(--text-light);
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+
+        .welcome-message {
+            color: var(--text-light);
+            font-weight: 500;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .welcome-message i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* Navigation Links */
+        .nav-menu {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 0 5px;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.15);
+            color: var(--text-light);
+            transform: translateY(-2px);
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 70%;
+            left: 15%;
+        }
+
+        .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            width: 70%;
+            left: 15%;
+        }
+
+        .logout-btn {
+            background: rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            color: var(--text-light);
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 992px) {
+            .recruiter-nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                padding: 1rem 0;
+                background: rgba(0,0,0,0.05);
+                border-radius: 8px;
+                margin-top: 1rem;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-item {
+                width: 100%;
+                margin: 0.3rem 0;
+            }
+
+            .nav-link {
+                width: 100%;
+                text-align: left;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .welcome-message {
+                order: -1;
+                width: 100%;
+                text-align: center;
+                padding: 0.5rem 0;
+                margin: 0 0 0.5rem 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .portal-name {
+                font-size: 1.2rem;
+            }
+
+            .welcome-message {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Recruiter Navigation Bar -->
+    <nav class="recruiter-navbar">
+        <div class="container">
+            <div class="recruiter-nav-container">
+                <div class="brand-section">
+                    <span class="portal-name">Online Job Portal</span>
+                </div>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fa fa-bars"></i>
+                </button>
+                
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'recruiter_home' %}">
+                            <i class="fa fa-home"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'add_job' %}">
+                            <i class="fa fa-plus-circle"></i>Add Job
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'job_list' %}">
+                            <i class="fa fa-list-ol"></i>Jobs List
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'applied_candidatelist' %}">
+                            <i class="fa fa-users"></i>Candidates Applied
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'change_passwordrecruiter' %}">
+                            <i class="fa fa-lock"></i>Change Password
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link logout-btn" href="{% url 'Logout' %}">
+                            <i class="fa fa-sign-out"></i>Log Out
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="welcome-message">
+                    <i class="fa fa-user-circle"></i>
+                    Welcome, {{request.user.first_name}} {{request.user.last_name}}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content area will go here -->
+    <div class="container mt-4">
+        <!-- Your dashboard content goes here -->
+    </div>
+
+    <!-- JavaScript for mobile menu toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+        });
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+{% load static %}
+
+{% block body %}
+
+{% include 'admin_navigation.html' %}
+
+<style>
+    :root {
+        --primary-color: #283593;
+        --secondary-color: #536DFE;
+        --accent-color: #FF9800;
+        --light-bg: #f5f7fa;
+        --dark-text: #333;
+        --light-text: #fff;
+        --gradient-bg: linear-gradient(135deg, #283593 0%, #3D5AFE 100%);
+        --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        --border-radius: 8px;
+        --transition: all 0.3s ease;
+    }
+    
+    /* All your existing CSS styles remain unchanged */
+    .page-title-bar {
+        background: var(--gradient-bg);
+        color: var(--light-text);
+        padding: 15px 30px;
+        font-size: 22px;
+        font-weight: 600;
+        text-align: center;
+        border-radius: var(--border-radius);
+        margin: 20px auto;
+        box-shadow: var(--box-shadow);
+        position: relative;
+        overflow: hidden;
+        max-width: 1200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .page-title-bar i {
+        margin-right: 10px;
+        font-size: 24px;
+    }
+    
+    .users-container {
+        background-color: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 1200px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+        max-height: 65vh;
+        scrollbar-width: thin;
+    }
+    
+    .table-responsive::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: var(--secondary-color);
+        border-radius: 10px;
+    }
+    
+    .user-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: none;
+        box-shadow: none;
+    }
+    
+    .user-table thead th {
+        background: var(--primary-color);
+        color: white;
+        font-weight: 600;
+        padding: 15px;
+        text-align: center;
+        vertical-align: middle;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border: none;
+    }
+    
+    .user-table thead th:first-child {
+        border-top-left-radius: var(--border-radius);
+    }
+    
+    .user-table thead th:last-child {
+        border-top-right-radius: var(--border-radius);
+    }
+    
+    .user-table tbody tr {
+        background-color: rgba(245, 247, 250, 0.5);
+        transition: var(--transition);
+    }
+    
+    .user-table tbody tr:hover {
+        background-color: rgba(83, 109, 254, 0.05);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .user-table tbody td {
+        padding: 15px;
+        text-align: center;
+        vertical-align: middle;
+        border-bottom: 1px solid #e0e6ed;
+    }
+    
+    .user-avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+        transition: var(--transition);
+    }
+    
+    .user-avatar:hover {
+        transform: scale(1.1);
+    }
+    
+    .gender-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .gender-badge i {
+        margin-right: 5px;
+    }
+    
+    .gender-male {
+        background-color: rgba(83, 109, 254, 0.1);
+        color: #536DFE;
+    }
+    
+    .gender-female {
+        background-color: rgba(244, 67, 54, 0.1);
+        color: #F44336;
+    }
+    
+    .gender-other {
+        background-color: rgba(76, 175, 80, 0.1);
+        color: #4CAF50;
+    }
+    
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgba(244, 67, 54, 0.1);
+        color: #F44336;
+        font-size: 16px;
+        transition: var(--transition);
+        cursor: pointer;
+        border: none;
+    }
+    
+    .action-btn:hover {
+        background-color: #F44336;
+        color: white;
+        transform: rotate(15deg);
+        box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+    }
+    
+    .user-email {
+        font-size: 14px;
+        color: #536DFE;
+    }
+    
+    .user-name {
+        font-weight: 600;
+        color: var(--dark-text);
+    }
+    
+    .user-contact {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .user-contact i {
+        margin-right: 5px;
+        color: #536DFE;
+    }
+    
+    .empty-state {
+        padding: 30px;
+        text-align: center;
+    }
+    
+    .empty-state i {
+        font-size: 60px;
+        color: #e0e6ed;
+        margin-bottom: 20px;
+    }
+    
+    .empty-state h3 {
+        font-size: 20px;
+        color: #999;
+    }
+    
+    .info-badge {
+        display: inline-block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .info-badge i {
+        margin-right: 5px;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .users-container {
+        animation: fadeIn 0.5s ease;
+    }
+    
+    /* Modal styling for confirmation */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .confirm-modal {
+        width: 400px;
+        background: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+    }
+    
+    .modal-header {
+        background: var(--gradient-bg);
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .modal-header i {
+        margin-right: 10px;
+        font-size: 24px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .modal-body p {
+        font-size: 16px;
+        color: var(--dark-text);
+        margin-bottom: 20px;
+    }
+    
+    .text-danger {
+        color: #F44336;
+    }
+    
+    .modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        padding: 0 20px 20px;
+    }
+    
+    .modal-btn {
+        padding: 8px 20px;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+    }
+    
+    .confirm-btn {
+        background-color: #F44336;
+        color: white;
+    }
+    
+    .confirm-btn:hover {
+        background-color: #d32f2f;
+        box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+    }
+    
+    .cancel-btn {
+        background-color: #e0e6ed;
+        color: var(--dark-text);
+    }
+    
+    .cancel-btn:hover {
+        background-color: #c5cdd8;
+    }
+    
+    .show {
+        display: flex;
+    }
+    
+    .scale-in {
+        transform: scale(1);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .users-container {
+            margin: 20px;
+        }
+        
+        .user-table tbody td {
+            padding: 10px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .user-table {
+            min-width: 800px;
+        }
+        
+        .confirm-modal {
+            width: 90%;
+            max-width: 400px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .page-title-bar {
+            margin: 10px;
+            padding: 10px 15px;
+        }
+        
+        .info-badge {
+            position: static;
+            margin-bottom: 15px;
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<!-- Page title bar -->
+<div class="page-title-bar">
+    <i class="fas fa-users"></i> User Management
+</div>
+
+<div class="users-container">
+    <div class="info-badge">
+        <i class="fas fa-info-circle"></i> Total Users: <span id="userCount">{{ data|length }}</span>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="user-table" id="userTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User Details</th>
+                    <th>Contact Information</th>
+                    <th>Gender</th>
+                    <th>Profile Photo</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <div class="user-name">{{ i.user.first_name }} {{ i.user.last_name }}</div>
+                        <div class="user-email">{{ i.user.username }}</div>
+                    </td>
+                    <td>
+                        <div class="user-contact">
+                            <i class="fas fa-phone-alt"></i> {{ i.mobile }}
+                        </div>
+                    </td>
+                    <td>
+                        {% if i.gender == 'Male' %}
+                            <span class="gender-badge gender-male">
+                                <i class="fas fa-mars"></i> Male
+                            </span>
+                        {% elif i.gender == 'Female' %}
+                            <span class="gender-badge gender-female">
+                                <i class="fas fa-venus"></i> Female
+                            </span>
+                        {% else %}
+                            <span class="gender-badge gender-other">
+                                <i class="fas fa-genderless"></i> {{ i.gender }}
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if i.image %}
+                            <img src="{{ i.image.url }}" class="user-avatar" alt="{{ i.user.first_name }}'s Profile Photo">
+                        {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}" class="user-avatar" alt="Default Avatar">
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button type="button" class="action-btn" onclick="confirmDelete('{{ i.user.id }}', '{{ i.user.first_name|escapejs }} {{ i.user.last_name|escapejs }}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="fas fa-users-slash"></i>
+                            <h3>No users found</h3>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="confirm-modal" id="confirmModal">
+        <div class="modal-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h4>Confirm Deletion</h4>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete the user <strong id="userName"></strong>?</p>
+            <p class="text-danger">This action cannot be undone.</p>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+            <a href="#" id="confirmDeleteBtn" class="modal-btn confirm-btn">Delete User</a>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+
+<script>
+    // Function to safely escape HTML content
+    function escapeHtml(text) {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+    
+    // Function to open the delete confirmation modal
+    function confirmDelete(userId, userName) {
+        document.getElementById('userName').textContent = userName;
+        document.getElementById('confirmDeleteBtn').href = "{% url 'delete_user' 0 %}".replace('0', userId);
+        document.getElementById('deleteModal').classList.add('show');
+        setTimeout(() => {
+            document.getElementById('confirmModal').classList.add('scale-in');
+        }, 50);
+    }
+    
+    // Function to close the modal
+    function closeModal() {
+        document.getElementById('confirmModal').classList.remove('scale-in');
+        setTimeout(() => {
+            document.getElementById('deleteModal').classList.remove('show');
+        }, 300);
+    }
+    
+    // Close modal if clicked outside
+    window.addEventListener('click', function(event) {
+        if (event.target == document.getElementById('deleteModal')) {
+            closeModal();
+        }
+    });
+    
+    // Error handling for image loading
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('.user-avatar');
+        images.forEach(img => {
+            img.onerror = function() {
+                this.src = "{% static 'images/default-avatar.png' %}";
+                this.onerror = null;
+            };
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,104 @@
+{% load static %}
+
+<style>
+    .footer-section {
+        background: linear-gradient(145deg, #2c3e50, #3498db);
+        color: white;
+        padding: 40px 0;
+        margin-top: 50px;
+    }
+    
+    .footer-section h3 {
+        color: #fff;
+        font-weight: 600;
+        border-bottom: 2px solid rgba(255,255,255,0.2);
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .footer-section p {
+        color: rgba(255,255,255,0.9);
+        font-size: 16px;
+        line-height: 1.8;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .footer-section i {
+        margin-right: 12px;
+        font-size: 20px;
+        min-width: 35px;
+        text-align: center;
+    }
+    
+    .newsletter-form .form-control {
+        height: 50px;
+        border-radius: 30px;
+        border: none;
+        padding: 0 25px;
+    }
+    
+    .newsletter-form .btn {
+        height: 50px;
+        padding: 0 30px;
+        border-radius: 30px;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .newsletter-form .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .input-group {
+        align-items: center;
+        gap: 10px;
+    }
+    
+    @media (max-width: 768px) {
+        .footer-section .col-md-4 {
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            flex-direction: column;
+        }
+        
+        .newsletter-form .btn {
+            width: 100%;
+            margin-left: 0;
+            margin-top: 10px;
+        }
+    }
+    </style>
+    
+    <div class="footer-section">
+      <div class="container">
+         <div class="row">
+             <div class="col-md-4 mt-3">
+                 <h3>Contact Information</h3>
+                 <p><i class="fa fa-map-marker"></i>HR Paharpur</p>
+                 <p><i class="fa fa-envelope"></i>career@paharpur.com</p>
+                 <p><i class="fa fa-mobile"></i>+91 7268902449</p>
+             </div>
+             <div class="col-md-4 mt-3">
+                 <h3>Online Recruitment</h3>
+                 <p>This website Paharpur careers deals specially with employment or careers. This website allows users and recruiters to post and apply for jobs.</p>
+             </div>
+             <div class="col-md-4 mt-3">
+                 <h3>Newsletter</h3>
+                 <p>Stay updated with our latest opportunities</p>
+                 <form method="post" class="newsletter-form">
+                     {% csrf_token %}
+                     <div class="input-group">
+                         <input type="email" name="emailid" placeholder="Enter your email" 
+                                class="form-control" required>
+                         <button type="submit" class="btn btn-primary">Subscribe</button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+      </div>
+    </div>

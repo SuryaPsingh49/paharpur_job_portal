@@ -1,0 +1,516 @@
+{% load static %}
+{% block body %}
+{% include 'admin_navigation.html' %}
+
+<style>
+    /* Modern color scheme and variables */
+    :root {
+        --primary: #4361ee;
+        --secondary: #3f37c9;
+        --accent: #4895ef;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --success: #4caf50;
+        --danger: #f44336;
+        --warning: #ff9800;
+        --info: #2196f3;
+        --border-radius: 8px;
+        --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+    }
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f5f7fa;
+    }
+    
+    .page-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+        box-shadow: var(--box-shadow);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .page-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+
+    .recruiter-stats {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        background: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+    }
+    
+    .table-container {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--box-shadow);
+        height: 600px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary) #e9ecef;
+    }
+    
+    .table-container::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .table-container::-webkit-scrollbar-track {
+        background: #e9ecef;
+        border-radius: 10px;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb {
+        background-color: var(--primary);
+        border-radius: 10px;
+    }
+    
+    #recruiters-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: none;
+    }
+    
+    #recruiters-table th {
+        background-color: #f8f9fa;
+        color: var(--dark);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+        border-bottom: 2px solid #e9ecef;
+        text-align: left;
+    }
+    
+    #recruiters-table th:first-child {
+        border-top-left-radius: var(--border-radius);
+    }
+    
+    #recruiters-table th:last-child {
+        border-top-right-radius: var(--border-radius);
+    }
+    
+    #recruiters-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #e9ecef;
+        vertical-align: middle;
+        transition: var(--transition);
+    }
+    
+    #recruiters-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    #recruiters-table tr:hover td {
+        background-color: #f8f9fa;
+    }
+    
+    .recruiter-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: var(--transition);
+    }
+    
+    .recruiter-image:hover {
+        transform: scale(1.1);
+    }
+    
+    .status-badge {
+        padding: 0.35rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .status-approved {
+        background-color: rgba(76, 175, 80, 0.15);
+        color: var(--success);
+    }
+    
+    .status-pending {
+        background-color: rgba(255, 152, 0, 0.15);
+        color: var(--warning);
+    }
+    
+    .status-rejected {
+        background-color: rgba(244, 67, 54, 0.15);
+        color: var(--danger);
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: var(--transition);
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+    
+    .btn-success {
+        background-color: var(--success);
+        color: white;
+    }
+    
+    .btn-danger {
+        background-color: var(--danger);
+        color: white;
+    }
+    
+    .action-btns {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        background-color: #f8f9fa;
+    }
+    
+    .icon-btn:hover {
+        transform: rotate(5deg);
+    }
+    
+    .icon-btn i {
+        font-size: 1rem;
+    }
+    
+    .delete-btn {
+        color: var(--danger);
+    }
+    
+    .delete-btn:hover {
+        background-color: rgba(244, 67, 54, 0.1);
+    }
+    
+    /* Search and filter section */
+    .filters-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .search-box {
+        position: relative;
+        flex: 1;
+        max-width: 400px;
+    }
+    
+    .search-box input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 3rem;
+        border-radius: var(--border-radius);
+        border: 1px solid #e9ecef;
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+    
+    .search-box input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    }
+    
+    .search-box i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #adb5bd;
+    }
+    
+    .filters-group {
+        display: flex;
+        gap: 0.75rem;
+    }
+    
+    .filter-select {
+        padding: 0.75rem 1rem;
+        border-radius: var(--border-radius);
+        border: 1px solid #e9ecef;
+        background-color: white;
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+    
+    .filter-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .table-container {
+            padding: 1rem;
+        }
+        
+        #recruiters-table th,
+        #recruiters-table td {
+            padding: 0.75rem;
+        }
+        
+        .recruiter-image {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .recruiter-stats {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .filters-section {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .search-box {
+            max-width: 100%;
+        }
+        
+        .filters-group {
+            flex-wrap: wrap;
+        }
+        
+        #recruiters-table {
+            width: 100%;
+            overflow-x: auto;
+            display: block;
+        }
+    }
+</style>
+
+<div class="container mt-4">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Recruiter Management</h1>
+        <div class="recruiter-stats">
+            <div class="stat-card">Total: <strong>{{ data|length }}</strong></div>
+        </div>
+    </div>
+    
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="search-box">
+            <i class="fa fa-search"></i>
+            <input type="text" id="recruiterSearch" placeholder="Search recruiters..." onkeyup="searchTable()">
+        </div>
+        <div class="filters-group">
+            <select class="filter-select" id="statusFilter" onchange="filterTable()">
+                <option value="">All Statuses</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
+            </select>
+            <select class="filter-select" id="genderFilter" onchange="filterTable()">
+                <option value="">All Genders</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <button class="btn btn-primary" onclick="resetFilters()">
+                <i class="fa fa-refresh"></i> Reset
+            </button>
+        </div>
+    </div>
+    
+    <!-- Table Container -->
+    <div class="table-container">
+        <table id="recruiters-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Recruiter</th>
+                    <th>Contact Information</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <img src="{{ i.image.url }}" class="recruiter-image" alt="{{ i.user.first_name }}">
+                            <div>
+                                <div style="font-weight: 600;">{{ i.user.first_name }} {{ i.user.last_name }}</div>
+                                <div style="font-size: 0.85rem; color: #6c757d;">{{ i.gender }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <div><i class="fa fa-envelope" style="color: #6c757d; margin-right: 0.5rem;"></i> {{ i.user.username }}</div>
+                            <div><i class="fa fa-phone" style="color: #6c757d; margin-right: 0.5rem;"></i> {{ i.mobile }}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500;">{{ i.company }}</div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-{% if i.status == 'pending' %}pending{% elif i.status == 'rejected' %}rejected{% else %}approved{% endif %}">
+                            {{ i.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'change_status' i.id %}" class="btn btn-success">
+                                <i class="fa fa-refresh"></i> Status
+                            </a>
+                            <a href="{% url 'delete_recruiter' i.user.id %}" class="icon-btn delete-btn" onclick="return confirm('Are you sure you want to delete this recruiter?')">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Search functionality
+    function searchTable() {
+        const input = document.getElementById("recruiterSearch");
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById("recruiters-table");
+        const tr = table.getElementsByTagName("tr");
+        
+        for (let i = 1; i < tr.length; i++) {
+            const nameCol = tr[i].getElementsByTagName("td")[1];
+            const emailCol = tr[i].getElementsByTagName("td")[2];
+            const companyCol = tr[i].getElementsByTagName("td")[3];
+            
+            if (nameCol && emailCol && companyCol) {
+                const nameText = nameCol.textContent || nameCol.innerText;
+                const emailText = emailCol.textContent || emailCol.innerText;
+                const companyText = companyCol.textContent || companyCol.innerText;
+                
+                if (nameText.toUpperCase().indexOf(filter) > -1 || 
+                    emailText.toUpperCase().indexOf(filter) > -1 || 
+                    companyText.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    
+    // Filter functionality
+    function filterTable() {
+        const statusFilter = document.getElementById("statusFilter").value.toUpperCase();
+        const genderFilter = document.getElementById("genderFilter").value.toUpperCase();
+        const table = document.getElementById("recruiters-table");
+        const tr = table.getElementsByTagName("tr");
+        
+        for (let i = 1; i < tr.length; i++) {
+            const statusCol = tr[i].getElementsByTagName("td")[4];
+            const genderCol = tr[i].getElementsByTagName("td")[1]; // Gender is in the recruiter column
+            
+            let displayRow = true;
+            
+            if (statusFilter !== "") {
+                const statusText = statusCol.textContent || statusCol.innerText;
+                if (statusText.toUpperCase().indexOf(statusFilter) === -1) {
+                    displayRow = false;
+                }
+            }
+            
+            if (genderFilter !== "") {
+                const genderText = genderCol.textContent || genderCol.innerText;
+                if (genderText.toUpperCase().indexOf(genderFilter) === -1) {
+                    displayRow = false;
+                }
+            }
+            
+            tr[i].style.display = displayRow ? "" : "none";
+        }
+    }
+    
+    // Reset filters
+    function resetFilters() {
+        document.getElementById("recruiterSearch").value = "";
+        document.getElementById("statusFilter").value = "";
+        document.getElementById("genderFilter").value = "";
+        
+        const table = document.getElementById("recruiters-table");
+        const tr = table.getElementsByTagName("tr");
+        
+        for (let i = 1; i < tr.length; i++) {
+            tr[i].style.display = "";
+        }
+    }
+    
+    // Add zebra striping to table
+    document.addEventListener("DOMContentLoaded", function() {
+        const table = document.getElementById("recruiters-table");
+        const rows = table.getElementsByTagName("tr");
+        
+        for (let i = 1; i < rows.length; i += 2) {
+            rows[i].style.backgroundColor = "#f8fafc";
+        }
+    });
+</script>
+
+{% include 'footer.html' %}
+{% endblock %}

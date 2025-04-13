@@ -1,0 +1,161 @@
+{% load static %}
+{% block body %}
+{% include 'navigation.html' %}
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f8f9fa;
+    }
+
+    .contact-header {
+        background: linear-gradient(135deg, #240A34 0%, #3C1053 100%);
+        padding: 80px 0;
+        text-align: center;
+        color: white;
+        margin-bottom: 60px;
+    }
+
+    .contact-header h1 {
+        font-size: 2.8rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+    }
+
+    .contact-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: none;
+        min-height: 250px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .contact-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    }
+
+    .contact-icon {
+        width: 70px;
+        height: 70px;
+        background: #3C1053;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 25px;
+        font-size: 28px;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .contact-card:hover .contact-icon {
+        background: #240A34;
+        transform: scale(1.1);
+    }
+
+    .contact-card h4 {
+        color: #2d3436;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .contact-card p {
+        color: #636e72;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .section-container {
+        padding: 60px 0;
+    }
+
+    .divider {
+        width: 60px;
+        height: 3px;
+        background: #3C1053;
+        margin: 20px auto 40px;
+    }
+
+</style>
+
+<div class="contact-header">
+    <h1>Get in Touch</h1>
+    <p>We're here to help and answer any questions you might have</p>
+</div>
+
+<div class="container section-container">
+    <div class="row justify-content-center">
+        <div class="col-md-10 text-center mb-5">
+            <h2 class="mb-3">Contact Information</h2>
+            <div class="divider"></div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Phone Card -->
+        <div class="col-lg-3 col-md-6">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <h4>Phone Number</h4>
+                <p>+91 876 354 5676</p>
+                <p class="text-muted small mt-2">Mon-Fri, 10am-7pm</p>
+            </div>
+        </div>
+
+        <!-- Email Card -->
+        <div class="col-lg-3 col-md-6">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h4>Email Address</h4>
+                <p>careerhub@gmail.com</p>
+                <p class="text-muted small mt-2">24/7 Support</p>
+            </div>
+        </div>
+
+        <!-- Address Card -->
+        <div class="col-lg-3 col-md-6">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h4>Office Address</h4>
+                <p>Ameerpet, Hyderabad</p>
+                <p class="text-muted small mt-2">Telangana, India</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Section -->
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 text-center">
+            <h4 class="mb-4">Prefer to Visit Us?</h4>
+            <div class="embed-responsive embed-responsive-16by9 rounded-lg">
+                <iframe 
+                    class="embed-responsive-item"
+                    src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d1750.6800406388397!2d77.32243601849605!3d28.648935170994214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d28.649217099999998!2d77.3242714!4m5!1s0x390cfa8c40000001%3A0x2a9c608469a46fac!2sPlot%2019%2C%20Maharajpur%2C%20Sahibabad%20Industrial%20Area%20Site%204%2C%20Sahibabad%2C%20Ghaziabad%2C%20Uttar%20Pradesh%20201010!3m2!1d28.648105299999997!2d77.3221971!5e0!3m2!1sen!2sin!4v1744106217322!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

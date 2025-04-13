@@ -1,0 +1,341 @@
+{% load static %}
+
+{% block body %}
+
+{% include 'recruiter_navigation.html' %}
+
+<style>
+:root {
+  --primary-color: #4a6fa5;
+  --secondary-color: #e8f4f8;
+  --accent-color: #2691d9;
+  --text-color: #333;
+  --light-gray: #f5f5f5;
+  --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --table-header-bg: linear-gradient(to right, #4776e6, #8e54e9);
+  --table-row-bg: #ffffff;
+  --table-row-alt-bg: #f9f9f9;
+  --table-row-hover: #e8f4f8;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--light-gray);
+  color: var(--text-color);
+}
+
+.page-title {
+  background: linear-gradient(to right, #240A34, #4A0D67);
+  color: white;
+  padding: 12px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  text-align: center;
+  margin: 0;
+  animation: fadeInOut 5s infinite;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+.jobs-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.jobs-header {
+  position: relative;
+  background: linear-gradient(to right, #4776e6, #8e54e9);
+  color: white;
+  border-radius: 15px 15px 0 0;
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--box-shadow);
+}
+
+.jobs-header h2 {
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+.add-job-btn {
+  background-color: white;
+  color: #4776e6;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.add-job-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+  background: white;
+  border-radius: 0 0 15px 15px;
+  padding: 20px;
+  box-shadow: var(--box-shadow);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.jobs-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.jobs-table thead th {
+  background: var(--table-header-bg);
+  color: white;
+  padding: 15px;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.jobs-table tbody tr {
+  background-color: var(--table-row-bg);
+  transition: var(--transition);
+  border-bottom: 1px solid #eee;
+}
+
+.jobs-table tbody tr:nth-child(even) {
+  background-color: var(--table-row-alt-bg);
+}
+
+.jobs-table tbody tr:hover {
+  background-color: var(--table-row-hover);
+}
+
+.jobs-table td {
+  padding: 15px;
+  text-align: center;
+  vertical-align: middle;
+  color: #444;
+  font-size: 15px;
+}
+
+.job-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.edit-btn {
+  background: linear-gradient(to right, #36d1dc, #5b86e5);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(91, 134, 229, 0.3);
+}
+
+.delete-btn {
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.delete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 65, 108, 0.3);
+}
+
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: #777;
+}
+
+.empty-state i {
+  font-size: 60px;
+  color: #ddd;
+  margin-bottom: 20px;
+}
+
+.empty-state p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.date-cell {
+  white-space: nowrap;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-active {
+  background-color: #e3fcef;
+  color: #00a362;
+}
+
+.status-expired {
+  background-color: #ffe9e9;
+  color: #ff5252;
+}
+
+/* Custom scrollbar */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 768px) {
+  .jobs-container {
+    padding: 10px;
+  }
+  
+  .jobs-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .jobs-table thead {
+    display: none;
+  }
+  
+  .jobs-table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .jobs-table td {
+    display: block;
+    text-align: right;
+    padding: 10px 15px;
+    position: relative;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .jobs-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    font-weight: 600;
+    text-align: left;
+  }
+  
+  .jobs-table td:last-child {
+    border-bottom: none;
+  }
+  
+  .action-buttons {
+    justify-content: flex-end;
+  }
+}
+</style>
+
+<div class="page-title">Job Listing Management</div>
+
+<div class="jobs-container">
+  <div class="jobs-header">
+    <h2>Manage Job Postings</h2>
+    <a href="{% url 'add_job' %}" class="add-job-btn">+ Add New Job</a>
+  </div>
+  
+  <div class="table-container">
+    <table class="jobs-table">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Job Title</th>
+          <th>Creation Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in job %}
+        <tr>
+          <td data-label="No.">{{ forloop.counter }}</td>
+          <td data-label="Job Title" class="job-title">{{ i.title }}</td>
+          <td data-label="Creation Date" class="date-cell">{{ i.creationdate }}</td>
+          <td data-label="Actions">
+            <div class="action-buttons">
+              <a href="{% url 'edit_jobdetail' i.id %}" class="edit-btn">Edit</a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">
+            <div class="empty-state">
+              <i class="fas fa-briefcase"></i>
+              <p>No job listings found</p>
+              <a href="{% url 'add_job' %}" class="add-job-btn">Create Your First Job Posting</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+
+{% endblock %}

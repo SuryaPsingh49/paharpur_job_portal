@@ -1,0 +1,472 @@
+{% load static %}
+
+{% block body %}
+
+{% include 'user_navigation.html' %}
+
+<style>
+:root {
+  --primary: #4361ee;
+  --secondary: #3f37c9;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --success: #4cc9f0;
+  --danger: #f72585;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f7fa;
+  background-image: linear-gradient(120deg, #e0f7fa 0%, #f5f7fa 100%);
+  background-attachment: fixed;
+}
+
+.profile-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.profile-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+}
+
+.profile-header {
+  background: var(--gradient);
+  padding: 25px 0;
+  color: white;
+  text-align: center;
+  position: relative;
+}
+
+.profile-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.profile-form {
+  padding: 30px 40px;
+}
+
+.profile-image-container {
+  margin-top: -50px;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.05);
+}
+
+.image-upload-container {
+  position: relative;
+  display: inline-block;
+}
+
+.image-upload-overlay {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: var(--primary);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.image-upload-overlay:hover {
+  background: var(--secondary);
+  transform: scale(1.1);
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--dark);
+  font-size: 14px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  outline: none;
+  background-color: white;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -12px;
+  margin-right: -12px;
+}
+
+.form-col {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+@media (max-width: 768px) {
+  .form-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+.gender-options {
+  display: flex;
+  gap: 16px;
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.radio-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-input {
+  position: absolute;
+  opacity: 0;
+}
+
+.radio-design {
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  background: white;
+  border: 1px solid #d1d1d1;
+  margin-right: 8px;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.radio-input:checked + .radio-design:before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  background: var(--primary);
+}
+
+.radio-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.file-input-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.file-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.file-input-label {
+  display: block;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-input-label:hover {
+  background-color: #e9ecef;
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 30px auto 0;
+  padding: 14px 24px;
+  background: var(--gradient);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.submit-button:active {
+  transform: translateY(1px);
+}
+
+.page-title {
+  background: var(--dark);
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  animation: slideIn 0.5s ease-out forwards;
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+@keyframes slideIn {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-out forwards;
+  transform: translateX(-20px);
+  opacity: 0;
+}
+
+@keyframes slideInLeft {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+@keyframes slideInRight {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+</style>
+
+<div class="page-title">
+  My Profile
+</div>
+
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <h1>User Profile</h1>
+    </div>
+    
+    <form method="post" onsubmit="return checkpass();" enctype="multipart/form-data" name="signup" class="profile-form">
+      {% csrf_token %}
+      
+      <div class="profile-image-container fade-in" style="animation-delay: 0.1s;">
+        <div class="image-upload-container">
+          <img src="{{student.image.url}}" class="profile-image" id="profile-image-preview">
+          <label for="profile-image-upload" class="image-upload-overlay">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+              <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+            </svg>
+          </label>
+          <input type="file" id="profile-image-upload" name="image" accept="image/*" style="display: none;" onchange="previewImage(this)">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-col slide-in-left" style="animation-delay: 0.2s;">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" name="fname" value="{{student.user.first_name}}" required>
+          </div>
+        </div>
+        <div class="form-col slide-in-right" style="animation-delay: 0.3s;">
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" name="lname" value="{{student.user.last_name}}" required>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-col slide-in-left" style="animation-delay: 0.4s;">
+          <div class="form-group">
+            <label class="form-label">Contact</label>
+            <input type="tel" class="form-control" name="contact" value="{{student.mobile}}" required>
+          </div>
+        </div>
+        <div class="form-col slide-in-right" style="animation-delay: 0.5s;">
+          <div class="form-group">
+            <label class="form-label">Email ID</label>
+            <input type="email" class="form-control" name="email" value="{{student.user.username}}" required>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-col slide-in-left" style="animation-delay: 0.6s;">
+          <div class="form-group">
+            <label class="form-label">Gender</label>
+            <div class="gender-options">
+              <label class="radio-container">
+                <input type="radio" class="radio-input" name="gender" value="Male" {% if student.gender == "Male" %}checked{% endif %}>
+                <span class="radio-design"></span>
+                <span class="radio-label">Male</span>
+              </label>
+              <label class="radio-container">
+                <input type="radio" class="radio-input" name="gender" value="Female" {% if student.gender == "Female" %}checked{% endif %}>
+                <span class="radio-design"></span>
+                <span class="radio-label">Female</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-col slide-in-right" style="animation-delay: 0.7s;">
+          <div class="form-group">
+            <label class="form-label">Profile Image</label>
+            <div class="file-input-container">
+              <input type="file" class="file-input" name="image" accept="image/*" id="file-input">
+              <label for="file-input" class="file-input-label">
+                <span id="file-name">Choose file</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="fade-in" style="animation-delay: 0.8s;">
+        <button type="submit" class="submit-button">Update Profile</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+
+<script>
+// Preview uploaded image
+function previewImage(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('profile-image-preview').src = e.target.result;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// Show selected file name
+document.getElementById('file-input').addEventListener('change', function() {
+  var fileName = this.files[0]?.name || 'Choose file';
+  document.getElementById('file-name').textContent = fileName;
+});
+
+// Add animation classes on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
+  animatedElements.forEach(element => {
+    element.style.opacity = '0';
+  });
+  
+  setTimeout(() => {
+    animatedElements.forEach(element => {
+      element.style.animationPlayState = 'running';
+    });
+  }, 100);
+});
+</script>
+
+{% if error == "no" %}
+<script>
+    alert("Profile Updated Successfully");
+    window.location = ('{% url 'user_home' %}')
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+    alert("Something went wrong Try again...!");
+</script>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <title>Paharpur - Online Job Portal</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #283593;
+            --secondary-color: #536DFE;
+            --accent-color: #3D5AFE;
+            --light-bg: #f5f7fa;
+            --dark-text: #333;
+            --light-text: #fff;
+            --gradient-bg: linear-gradient(135deg, #283593 0%, #3D5AFE 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+        }
+        
+        /* Header styles */
+        header {
+            background: var(--gradient-bg);
+            color: var(--light-text);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-container img {
+            width: 180px;
+            height: auto;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+        
+        .brand-title {
+            position: relative;
+        }
+        
+        .brand-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--light-text);
+        }
+        
+        .brand-title span {
+            color: #FF9800;
+            font-weight: 800;
+        }
+        
+        .brand-title:after {
+            content: '';
+            display: block;
+            width: 80%;
+            height: 3px;
+            background: #FF9800;
+            margin-top: 3px;
+            border-radius: 2px;
+        }
+        
+        /* Social Media Icons */
+        .social-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        
+        .social-icon {
+            font-size: 22px;
+            margin-left: 20px;
+            color: var(--light-text);
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-3px);
+            opacity: 1;
+            color: #FF9800;
+        }
+        
+        /* Navigation Bar */
+        .main-navbar {
+            background-color: var(--primary-color);
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+        
+        .nav-brand {
+            color: var(--light-text);
+            font-size: 20px;
+            font-weight: 500;
+            padding: 15px 0;
+        }
+        
+        .main-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: var(--light-text);
+            text-decoration: none;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .nav-link:hover {
+            color: #FF9800;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link:before {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: #FF9800;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover:before {
+            width: 100%;
+        }
+        
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            border-radius: 4px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: var(--dark-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border-left: 3px solid transparent;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(83, 109, 254, 0.05);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        /* Banner Section */
+        .banner {
+            background: var(--gradient-bg);
+            color: var(--light-text);
+            padding: 15px 0;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* For DataTables */
+        .dataTables_wrapper {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin: 20px 5%;
+        }
+        
+        .top-section, .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            align-items: center;
+        }
+        
+        /* Buttons styling */
+        .dt-buttons {
+            margin-bottom: 15px;
+        }
+        
+        .dt-button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .dt-button:hover {
+            background-color: var(--accent-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .header-container, .navbar-container {
+                flex-direction: column;
+            }
+            
+            .social-container, .main-menu {
+                margin-top: 15px;
+            }
+            
+            .nav-link {
+                padding: 10px 15px;
+            }
+            
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                display: none;
+                margin-left: 20px;
+            }
+            
+            .dropdown:hover .dropdown-content {
+                display: none;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-menu {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-item {
+                width: 100%;
+            }
+            
+            .social-icon {
+                margin-left: 15px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="{% static 'images/p3.jpg' %}" alt="Paharpur Logo">
+                <div class="brand-title">
+                    <h1><span>Paharpur</span>-Online Job Portal</h1>
+                </div>
+            </div>
+            
+            <div class="social-container">
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-telegram-plane"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation Bar -->
+    <nav class="main-navbar">
+        <div class="navbar-container">
+            <div class="nav-brand">Online Job Portal</div>
+            
+            <ul class="main-menu">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_home' %}">
+                        <i class="fas fa-home"></i>Home
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-users"></i>Recruiters
+                        <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 12px;"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a class="dropdown-item" href="{% url 'recruiter_pending' %}">Pending Approvals</a>
+                        <a class="dropdown-item" href="{% url 'recruiter_accepted' %}">Accepted Approvals</a>
+                        <a class="dropdown-item" href="{% url 'recruiter_rejected' %}">Rejected Approvals</a>
+                        <a class="dropdown-item" href="{% url 'recruiter_all' %}">All Recruiters</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_users' %}">
+                        <i class="fas fa-user"></i>View Users
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'change_passwordadmin' %}">
+                        <i class="fas fa-user-circle"></i>Change Password
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Logout' %}">
+                        <i class="fas fa-sign-out-alt"></i>Log Out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Banner Section -->
+    <div class="banner">
+        Welcome to Paharpur Online Job Portal - Your Gateway to Career Opportunities
+    </div>
+    
+    <!-- Main Content Area - For Data Tables or other content -->
+    <div class="content-area">
+        <!-- Your content goes here -->
+    </div>
+    
+    <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#example').DataTable({
+                dom: '<"top-section"fB>rt<"bottom-section"lip>',
+                buttons: [
+                    'copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'
+                ]
+            });
+            
+            // Mobile menu toggle functionality
+            if ($(window).width() < 992) {
+                $('.dropdown').click(function() {
+                    $(this).toggleClass('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

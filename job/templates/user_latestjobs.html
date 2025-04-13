@@ -1,0 +1,206 @@
+{% load static %}  
+{% block body %}  
+{% include 'user_navigation.html' %} 
+
+<style>
+    /* Modern color palette */
+    :root {
+        --primary-color: #3a7bd5;
+        --primary-dark: #0d47a1;
+        --accent-color: #4CAF50;
+        --accent-dark: #388E3C;
+        --text-dark: #2d3748;
+        --text-light: #718096;
+        --bg-light: #f8fafc;
+        --card-bg: #ffffff;
+        --gray-light: #f1f5f9;
+        --border-color: #e2e8f0;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    marquee {
+        font-family: 'Segoe UI', Roboto, sans-serif !important;
+        font-size: 18px !important;
+        color: white !important;
+        background: linear-gradient(135deg, #1e3c72, #2a5298) !important;
+        padding: 12px 0 !important;
+        font-weight: 600 !important;
+        margin-top: 0 !important;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--border-color), transparent);
+        margin: 12px 0 24px;
+    }
+
+    .container {
+        padding: 20px;
+        height: 700px;
+        overflow-y: auto;
+        /* Custom scrollbar */
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) var(--gray-light);
+    }
+
+    .container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .container::-webkit-scrollbar-track {
+        background: var(--gray-light);
+        border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 10px;
+    }
+
+    .card {
+        width: calc(33.33% - 20px);
+        margin: 10px;
+        float: left;
+        box-sizing: border-box;
+        border-radius: 12px !important;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-color);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)) !important;
+        color: white !important;
+        padding: 16px !important;
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+    }
+
+    .card-body {
+        padding: 20px;
+        background-color: var(--card-bg);
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 16px;
+        line-height: 1.4;
+    }
+
+    .card-text {
+        color: var(--text-light);
+        margin-bottom: 10px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+    }
+
+    .card-text::before {
+        content: "•";
+        color: var(--primary-color);
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-right: 8px;
+    }
+
+    .card-footer {
+        background-color: var(--gray-light);
+        border-top: 1px solid var(--border-color);
+        padding: 15px;
+        text-align: center;
+    }
+
+    .card-footer.text-center[style*="color:green"] {
+        color: var(--accent-color) !important;
+        font-weight: 600 !important;
+        font-size: 16px !important;
+        background-color: rgba(76, 175, 80, 0.1);
+    }
+
+    .btn-success {
+        background: var(--accent-color) !important;
+        border-color: var(--accent-color) !important;
+        color: white !important;
+        padding: 8px 20px !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        transition: all 0.3s ease !important;
+        text-decoration: none !important;
+        display: inline-block;
+        font-size: 14px !important;
+    }
+
+    .btn-success:hover {
+        background: var(--accent-dark) !important;
+        box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3) !important;
+    }
+
+    .clearfix {
+        clear: both;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+        .card {
+            width: calc(50% - 20px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .card {
+            width: 100%;
+            margin: 10px 0;
+        }
+    }
+</style>
+
+<marquee direction="right">Latest Jobs</marquee>
+<hr>
+
+<div class="container">
+    {% for i in job %}
+    <div class="card">
+        <div class="card-header">
+            {{ i.recruiter.company }}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ i.title }}</h5>
+            <p class="card-text">Location: {{ i.location }}</p>
+            <p class="card-text">Start Date: {{ i.start_date }}</p>
+            <p class="card-text">End Date: {{ i.end_date }}</p>
+        </div>
+        {% if i.id in li %}
+        <div class="card-footer text-center" style="font-weight:bold;font-size:20px;color:green;">
+            Applied
+        </div>
+        {% else %}
+        <div class="card-footer text-center">
+            <a href="{% url 'job_detail' i.id %}" class="btn btn-success">Apply</a>
+        </div>
+        {% endif %}
+    </div>
+    {% if forloop.counter|divisibleby:3 %}
+        <div class="clearfix"></div> <!-- Clear float every third card -->
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,336 @@
+{% load static %}
+
+{% block body %}
+
+{% include 'recruiter_navigation.html' %}
+
+<style>
+:root {
+  --primary-color: #4a6fa5;
+  --secondary-color: #e8f4f8;
+  --accent-color: #2691d9;
+  --text-color: #333;
+  --light-gray: #f5f5f5;
+  --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --table-header-bg: linear-gradient(to right, #4776e6, #8e54e9);
+  --table-row-bg: #ffffff;
+  --table-row-alt-bg: #f9f9f9;
+  --table-row-hover: #e8f4f8;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--light-gray);
+  color: var(--text-color);
+}
+
+.page-title {
+  background: linear-gradient(to right, #240A34, #4A0D67);
+  color: white;
+  padding: 12px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  text-align: center;
+  margin: 0;
+  animation: fadeInOut 5s infinite;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+.candidates-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.candidates-header {
+  position: relative;
+  background: linear-gradient(to right, #4776e6, #8e54e9);
+  color: white;
+  border-radius: 15px 15px 0 0;
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--box-shadow);
+}
+
+.candidates-header h2 {
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+.filter-section {
+  display: flex;
+  gap: 15px;
+}
+
+.filter-dropdown {
+  background-color: white;
+  color: #4776e6;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-dropdown:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+  background: white;
+  border-radius: 0 0 15px 15px;
+  padding: 20px;
+  box-shadow: var(--box-shadow);
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.candidates-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.candidates-table thead th {
+  background: var(--table-header-bg);
+  color: white;
+  padding: 15px 10px;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.candidates-table tbody tr {
+  background-color: var(--table-row-bg);
+  transition: var(--transition);
+  border-bottom: 1px solid #eee;
+}
+
+.candidates-table tbody tr:nth-child(even) {
+  background-color: var(--table-row-alt-bg);
+}
+
+.candidates-table tbody tr:hover {
+  background-color: var(--table-row-hover);
+}
+
+.candidates-table td {
+  padding: 12px 10px;
+  text-align: center;
+  vertical-align: middle;
+  color: #444;
+  font-size: 14px;
+}
+
+.candidate-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.download-link {
+  background: linear-gradient(to right, #36d1dc, #5b86e5);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.download-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(91, 134, 229, 0.3);
+}
+
+.email-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.job-title-cell {
+  font-weight: 500;
+  color: #4a6fa5;
+}
+
+.date-cell {
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: #777;
+}
+
+.empty-state i {
+  font-size: 60px;
+  color: #ddd;
+  margin-bottom: 20px;
+}
+
+.empty-state p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* Custom scrollbar */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 992px) {
+  .candidates-container {
+    padding: 10px;
+  }
+  
+  .candidates-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .candidates-table thead {
+    display: none;
+  }
+  
+  .candidates-table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .candidates-table td {
+    display: block;
+    text-align: right;
+    padding: 10px 15px;
+    position: relative;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .candidates-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    font-weight: 600;
+    text-align: left;
+  }
+  
+  .candidates-table td:last-child {
+    border-bottom: none;
+  }
+  
+  .email-cell {
+    max-width: none;
+  }
+}
+</style>
+
+<div class="page-title">Candidate Application Management</div>
+
+<div class="candidates-container">
+  <div class="candidates-header">
+    <h2>Applied Candidates List</h2>
+    <div class="filter-section">
+      <select class="filter-dropdown">
+        <option>All Jobs</option>
+        <!-- This could be populated dynamically -->
+      </select>
+      <select class="filter-dropdown">
+        <option>All Dates</option>
+        <option>Last 7 Days</option>
+        <option>Last 30 Days</option>
+        <option>Last 90 Days</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="table-container">
+    <table class="candidates-table">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Candidate Name</th>
+          <th>Email</th>
+          <th>Contact</th>
+          <th>Job Title</th>
+          <th>Company</th>
+          <th>Apply Date</th>
+          <th>Resume</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in data %}
+        {% if request.user.id == i.job.recruiter.user.id %}
+        <tr>
+          <td data-label="No.">{{ forloop.counter }}</td>
+          <td data-label="Candidate Name" class="candidate-name">{{ i.student.user.first_name }} {{ i.student.user.last_name }}</td>
+          <td data-label="Email" class="email-cell">{{ i.student.user.username }}</td>
+          <td data-label="Contact">{{ i.student.mobile }}</td>
+          <td data-label="Job Title" class="job-title-cell">{{ i.job.title }}</td>
+          <td data-label="Company">{{ i.job.recruiter.company }}</td>
+          <td data-label="Apply Date" class="date-cell">{{ i.apply_date }}</td>
+          <td data-label="Resume">
+            <a href="{{i.resume.url}}" class="download-link">
+              <i class="fas fa-file-download"></i> Resume
+            </a>
+          </td>
+        </tr>
+        {% endif %}
+        {% empty %}
+        <tr>
+          <td colspan="8">
+            <div class="empty-state">
+              <i class="fas fa-user-tie"></i>
+              <p>No applications have been received yet</p>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% include 'footer.html' %}
+
+{% endblock %}
